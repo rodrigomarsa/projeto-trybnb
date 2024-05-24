@@ -3,14 +3,15 @@ package com.betrybe.trybnb.ui.views.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.betrybe.trybnb.R
+import com.betrybe.trybnb.databinding.ActivityMainBinding
 import com.betrybe.trybnb.ui.views.fragments.CreateReservationFragment
 import com.betrybe.trybnb.ui.views.fragments.ProfileFragment
 import com.betrybe.trybnb.ui.views.fragments.ReservationFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private val mBottomNavigation: BottomNavigationView by lazy { findViewById(R.id.navigation_bottom_view) }
+    private lateinit var binding: ActivityMainBinding
+
     private val reservationFragment = ReservationFragment()
     private val createReservationFragment = CreateReservationFragment()
     private val profileFragment = ProfileFragment()
@@ -18,9 +19,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        mBottomNavigation.setOnItemSelectedListener {
+        binding.navigationBottomView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.reservation_menu_item -> {
                     supportFragmentManager.beginTransaction()

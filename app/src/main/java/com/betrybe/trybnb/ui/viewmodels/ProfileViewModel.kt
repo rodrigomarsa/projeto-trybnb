@@ -1,33 +1,42 @@
 package com.betrybe.trybnb.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.betrybe.trybnb.common.ApiIdlingResource
+import com.betrybe.trybnb.data.models.LoginRequest
+import com.betrybe.trybnb.data.repository.LoginRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class ProfileViewModel : ViewModel() {
-    private val _loginError = MutableLiveData<String>()
-    val loginError: LiveData<String> get() = _loginError
+    private val mLoginRepository = LoginRepository()
 
-    private val _passwordError = MutableLiveData<String>()
-    val passwordError: LiveData<String> get() = _passwordError
+    private var _isLoginError = MutableStateFlow(false)
+    val isLoginError: StateFlow<Boolean>
+        get() = _isLoginError
 
-    fun validateFields(login: String, password: String): Boolean {
-        var hasError = false
+    private var _errorMessage = MutableLiveData("")
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
 
-        if (login.isEmpty()) {
-            _loginError.value = "O campo Login é obrigatório"
-            hasError = true
-        } else {
-            _loginError.value = null
+    fun getToken(request: LoginRequest) {
+        CoroutineScope(Dispatchers.IO).launch {
+            ApiIdlingResource.increment()
+            val response = mLoginRepository.login(request)
+            if (response.success) {
+                val token = response.data?.token
+                Log.d("ProfileViewModel", "Token: $token")
+                _isLoginError.value = false
+            } else {
+                _errorMessage.postValue(response.message)
+                _isLoginError.value = true
+            }
+            ApiIdlingResource.decrement()
         }
-
-        if (password.isEmpty()) {
-            _passwordError.value = "O campo Password é obrigatório"
-            hasError = true
-        } else {
-            _passwordError.value = null
-        }
-
-        return hasError
     }
 }

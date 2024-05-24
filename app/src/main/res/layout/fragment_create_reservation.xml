@@ -3,6 +3,6 @@
     android:id="@+id/create_reservation_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none">
+    android:fadeScrollbars="true">
 
 </ScrollView>

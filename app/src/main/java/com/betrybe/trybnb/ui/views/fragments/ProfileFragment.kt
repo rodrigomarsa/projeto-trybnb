@@ -4,47 +4,70 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.betrybe.trybnb.R
+import com.betrybe.trybnb.data.models.LoginRequest
+import com.betrybe.trybnb.databinding.FragmentProfileBinding
 import com.betrybe.trybnb.ui.viewmodels.ProfileViewModel
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.snackbar.Snackbar
 
 class ProfileFragment : Fragment() {
-
-    private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var binding: FragmentProfileBinding
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        binding = FragmentProfileBinding.bind(view)
 
-        profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-
-        val loginInput: TextInputEditText = view.findViewById(R.id.login_input)
-        val loginLayout: TextInputLayout = view.findViewById(R.id.login_input_profile)
-        val passwordInput: TextInputEditText = view.findViewById(R.id.password_input)
-        val passwordLayout: TextInputLayout = view.findViewById(R.id.password_input_profile)
-        val loginButton: Button = view.findViewById(R.id.login_button_profile)
-
-        loginButton.setOnClickListener {
-            val login = loginInput.text.toString()
-            val password = passwordInput.text.toString()
-            profileViewModel.validateFields(login, password)
+        binding.loginButtonProfile.setOnClickListener {
+            val login = binding.loginInput.text.toString()
+            val password = binding.passwordInput.text.toString()
+            validateLogin(login)
+            validatePassword(password)
+            if (validateLogin(login) && validatePassword(password)) {
+                val request = LoginRequest(login, password)
+                profileViewModel.getToken(request)
+            }
+            val error = profileViewModel.isLoginError.value
+            if (error) {
+                Snackbar.make(
+                    binding.profileScrollView,
+                    "Login ou senha inválidos",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            } else {
+                Snackbar.make(
+                    binding.profileScrollView,
+                    "Login feito com sucesso!",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
+        return binding.root
+    }
 
-        profileViewModel.loginError.observe(viewLifecycleOwner) { errorMessage ->
-            loginLayout.error = errorMessage
+    private fun validateLogin(login: String): Boolean {
+        return if (login.isEmpty()) {
+            binding.loginInputProfile.error = "O campo Login é obrigatório"
+            false
+        } else {
+            binding.loginInputProfile.error = null
+            true
         }
+    }
 
-        profileViewModel.passwordError.observe(viewLifecycleOwner) { errorMessage ->
-            passwordLayout.error = errorMessage
+    private fun validatePassword(password: String): Boolean {
+        return if (password.isEmpty()) {
+            binding.passwordInputProfile.error = "O campo Password é obrigatório"
+            false
+        } else {
+            binding.passwordInputProfile.error = null
+            true
         }
-
-        return view
     }
 }
