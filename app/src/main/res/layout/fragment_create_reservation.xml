@@ -29,6 +29,7 @@
             android:hint="Nome do hóspede">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/first_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -41,6 +42,7 @@
             android:hint="Sobrenome do hóspede">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/last_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -54,6 +56,7 @@
             app:startIconDrawable="@drawable/ic_calendar">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/checkin_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,6 +70,7 @@
             app:startIconDrawable="@drawable/ic_calendar">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/checkout_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -79,6 +83,7 @@
             android:hint="Necessidades adicionais">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/additional_needs_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -96,6 +101,7 @@
             app:startIconDrawable="@drawable/ic_money">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/total_price_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
