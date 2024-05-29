@@ -5,11 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.betrybe.trybnb.R
+import com.betrybe.trybnb.data.models.Booking
+import com.betrybe.trybnb.data.models.BookingDates
 import com.betrybe.trybnb.databinding.FragmentCreateReservationBinding
+import com.betrybe.trybnb.ui.viewmodels.BookingViewModel
+import com.betrybe.trybnb.ui.viewmodels.CreateReservationViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class CreateReservationFragment : Fragment() {
     private lateinit var binding: FragmentCreateReservationBinding
+    private val viewModel: CreateReservationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +32,40 @@ class CreateReservationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.createReservationButton.setOnClickListener {
-            validateFields()
+            val firstName = binding.firstNameInput.text.toString()
+            val lastName = binding.lastNameInput.text.toString()
+            val totalPrice = binding.totalPriceInput.text.toString().toInt()
+            val depositpaid = binding.depositpaidCreateReservation.isChecked
+            val checkin = binding.checkinInput.text.toString()
+            val checkout = binding.checkoutInput.text.toString()
+            val additionalNeeds = binding.additionalNeedsInput.text.toString()
+
+            if (validateFields()) {
+                viewModel.createBooking(
+                    Booking(
+                        firstName,
+                        lastName,
+                        totalPrice,
+                        depositpaid,
+                        BookingDates(checkin, checkout),
+                        additionalNeeds,
+                    )
+                )
+            }
+            val error = viewModel.isErrorOccurred.value
+            if (error) {
+                Snackbar.make(
+                    binding.createReservationScrollView,
+                    "Erro ao criar reserva",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            } else {
+                Snackbar.make(
+                    binding.createReservationScrollView,
+                    "Reserva feita com sucesso!",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.betrybe.trybnb.common.ApiIdlingResource
 import com.betrybe.trybnb.data.models.Booking
 import com.betrybe.trybnb.data.models.BookingId
+import com.betrybe.trybnb.data.models.CreatedBooking
 import com.betrybe.trybnb.data.repository.BookingRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

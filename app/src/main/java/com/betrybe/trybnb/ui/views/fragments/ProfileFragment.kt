@@ -23,6 +23,11 @@ class ProfileFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         binding = FragmentProfileBinding.bind(view)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.loginButtonProfile.setOnClickListener {
             val login = binding.loginInput.text.toString()
@@ -48,7 +53,6 @@ class ProfileFragment : Fragment() {
                 ).show()
             }
         }
-        return binding.root
     }
 
     private fun validateLogin(login: String): Boolean {
