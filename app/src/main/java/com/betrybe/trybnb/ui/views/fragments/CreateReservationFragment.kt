@@ -10,7 +10,6 @@ import com.betrybe.trybnb.R
 import com.betrybe.trybnb.data.models.Booking
 import com.betrybe.trybnb.data.models.BookingDates
 import com.betrybe.trybnb.databinding.FragmentCreateReservationBinding
-import com.betrybe.trybnb.ui.viewmodels.BookingViewModel
 import com.betrybe.trybnb.ui.viewmodels.CreateReservationViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -32,23 +31,20 @@ class CreateReservationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.createReservationButton.setOnClickListener {
-            val firstName = binding.firstNameInput.text.toString()
-            val lastName = binding.lastNameInput.text.toString()
-            val totalPrice = binding.totalPriceInput.text.toString().toInt()
-            val depositpaid = binding.depositpaidCreateReservation.isChecked
-            val checkin = binding.checkinInput.text.toString()
-            val checkout = binding.checkoutInput.text.toString()
-            val additionalNeeds = binding.additionalNeedsInput.text.toString()
+            validateFields()
 
             if (validateFields()) {
                 viewModel.createBooking(
                     Booking(
-                        firstName,
-                        lastName,
-                        totalPrice,
-                        depositpaid,
-                        BookingDates(checkin, checkout),
-                        additionalNeeds,
+                        binding.firstNameInput.text.toString(),
+                        binding.lastNameInput.text.toString(),
+                        binding.totalPriceInput.text.toString().toInt(),
+                        binding.depositpaidCreateReservation.isChecked,
+                        BookingDates(
+                            binding.checkinInput.text.toString(),
+                            binding.checkoutInput.text.toString()
+                        ),
+                        binding.additionalNeedsInput.text.toString(),
                     )
                 )
             }
